@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRIS · bayar simpel keren</title>
+  <!-- Font Awesome 5 (icons) -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #0b1e2b 0%, #1a2f3f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* card utama — clean, glossy, modern */
+    .payment-card {
+      max-width: 500px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 2.5rem;
+      padding: 2rem 1.8rem 2.2rem;
+      box-shadow: 0 30px 50px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+      transition: transform 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .payment-card:hover {
+      transform: scale(1.01);
+    }
+
+    /* header qris */
+    .qris-badge {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px dashed rgba(0, 77, 64, 0.2);
+    }
+
+    .qris-standar {
+      background: #006b5f;
+      color: white;
+      padding: 0.3rem 1rem 0.3rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 10px rgba(0,107,95,0.3);
+    }
+
+    .qris-standar i {
+      font-size: 1rem;
+    }
+
+    .nmr-nmd {
+      font-size: 0.9rem;
+      background: #eef3f5;
+      padding: 0.25rem 1rem;
+      border-radius: 40px;
+      color: #1a3b47;
+      font-weight: 500;
+      border: 1px solid #cbd5e0;
+    }
+
+    /* toko & detail */
+    .store-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 50, 60, 0.03);
+      padding: 1rem 1.2rem;
+      border-radius: 28px;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .store-name {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(130deg, #004d4a, #033c3f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .store-name i {
+      background: none;
+      -webkit-text-fill-color: #0f766e;
+      margin-right: 4px;
+      font-size: 1.7rem;
+    }
+
+    .a01-chip {
+      background: #1e2b32;
+      color: #b7e4db;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border: 1px solid #3f5a66;
+      box-shadow: 0 2px 0 #0e1a1f;
+    }
+
+    /* QR code mock (gambar dari teks) — simpel tapi keren */
+    .qr-simulation {
+      background: #ffffff;
+      padding: 1.5rem 1rem;
+      border-radius: 42px;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid rgba(0, 77, 64, 0.3);
+      box-shadow: 0 15px 20px -10px rgba(0, 50, 30, 0.4);
+    }
+
+    .qr-inner {
+      background: #f9fbfc;
+      padding: 1rem 1.8rem;
+      border-radius: 32px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .qris-logo-simple {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #002f2b;
+      letter-spacing: 4px;
+      background: #e7f1ef;
+      padding: 0.4rem 1rem;
+      border-radius: 60px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      border: 1px solid #bedad3;
+    }
+
+    .qris-grid {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      font-size: 3.2rem;
+      font-weight: 300;
+      color: #03363d;
+      background: white;
+      padding: 0.3rem 1.2rem;
+      border-radius: 60px;
+      margin: 0.6rem 0;
+      border: 2px solid #bccfca;
+      box-shadow: inset 0 2px 3px rgba(0,0,0,0.02);
+    }
+
+    .qris-grid span {
+      background: #e9edf0;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      font-weight: 600;
+      font-size: 1.9rem;
+      color: #1c4e4e;
+      box-shadow: 0 2px 0 #b1c1c1;
+    }
+
+    .scan-hint {
+      font-size: 1rem;
+      color: #17494d;
+      background: #dcf0ec;
+      padding: 0.4rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 500;
+      border: 1px solid #8fb3af;
+    }
+
+    .scan-hint i {
+      margin-right: 5px;
+      color: #006b5f;
+    }
+
+    /* tautan cek aplikasi */
+    .aspiris-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f0f7fa;
+      padding: 0.7rem 1.2rem;
+      border-radius: 40px;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      color: #1c474d;
+      border: 1px solid #bcd2d9;
+      font-weight: 500;
+    }
+
+    .aspiris-link i {
+      color: #00796b;
+      font-size: 1.2rem;
+    }
+
+    .aspiris-link a {
+      color: #004d66;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px dotted;
+    }
+
+    /* bagian rekening — DANA & SEABANK */
+    .rekening-section {
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 32px;
+      padding: 1.5rem 1.2rem 1.2rem;
+      margin-top: 0.5rem;
+      border: 1px solid white;
+      box-shadow: 0 8px 16px -8px rgba(0, 40, 30, 0.3);
+    }
+
+    .rekening-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #002d28;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .rekening-title i {
+      background: #194949;
+      color: white;
+      border-radius: 50%;
+      padding: 0.4rem;
+      font-size: 0.9rem;
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bank-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+      background: white;
+      padding: 0.8rem 1rem;
+      border-radius: 28px;
+      border: 1px solid #deedeb;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+      transition: all 0.15s;
+    }
+
+    .bank-item:hover {
+      border-color: #2b8d82;
+      box-shadow: 0 6px 10px rgba(32, 107, 91, 0.1);
+    }
+
+    .bank-icon {
+      background: #d1f0ea;
+      width: 46px;
+      height: 46px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #004d40;
+      border: 1px solid #96cfc4;
+    }
+
+    .bank-detail {
+      flex: 1;
+    }
+
+    .bank-label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #385b5b;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .bank-label span {
+      background: #f1c40f;
+      color: #1e3b3b;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 40px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .bank-number {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0b302b;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .bank-holder {
+      font-size: 0.95rem;
+      color: #3a5f5b;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .bank-holder i {
+      font-size: 0.7rem;
+      color: #2e7d72;
+    }
+
+    .divider-small {
+      margin: 0.8rem 0 0.8rem 2.8rem;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #b9d4cf, transparent);
+    }
+
+    /* cetak & footer */
+    .print-footer {
+      margin-top: 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #456b68;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0 0.2rem;
+    }
+
+    .print-footer i {
+      color: #007366;
+      margin-right: 4px;
+    }
+
+    .version {
+      background: rgba(0, 80, 70, 0.1);
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+    }
+
+    /* responsif */
+    @media (max-width: 420px) {
+      .payment-card { padding: 1.5rem; }
+      .store-name { font-size: 1.5rem; }
+      .qris-grid span { width: 38px; height: 38px; font-size: 1.5rem; }
+      .bank-number { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-card">
+
+    <!-- header QRIS standar + NMD -->
+    <div class="qris-badge">
+      <div class="qris-standar">
+        <i class="fas fa-qrcode"></i> QRIS <span style="font-weight:300;margin:0 4px;">•</span> STANDAR
+      </div>
+      <div class="nmr-nmd">
+        <i class="far fa-address-card" style="margin-right: 6px;"></i> NMD: ID1025391527161
+      </div>
+    </div>
+
+    <!-- ALPIN STORE + A01 -->
+    <div class="store-row">
+      <div class="store-name">
+        <i class="fas fa-store-alt"></i> ALPIN STORE
+      </div>
+      <div class="a01-chip">A01</div>
+    </div>
+
+    <!-- QRIS simulation (gaya modern) -->
+    <div class="qr-simulation">
+      <div class="qr-inner">
+        <div class="qris-logo-simple">
+          <i class="fas fa-qrcode" style="margin-right: 8px;"></i> SATU QRIS
+        </div>
+        <!-- kotak kotak gaya QR code -->
+        <div class="qris-grid">
+          <span>■</span><span>█</span><span>▋</span><span>◼</span>
+        </div>
+        <div class="scan-hint">
+          <i class="fas fa-camera"></i> scan pakai aplikasi pembayaran
+        </div>
+      </div>
+    </div>
+
+    <!-- link cek aplikasi (www.aspiris.id) -->
+    <div class="aspiris-link">
+      <span><i class="fas fa-globe"></i> penyelenggara: <a href="#">www.aspiris.id</a></span>
+      <i class="fas fa-check-circle" style="color: #00897b;"></i>
+    </div>
+
+    <!-- REKENING KITA (DANA & SEABANK) -->
+    <div class="rekening-section">
+      <div class="rekening-title">
+        <i class="fas fa-wallet"></i> pembayaran instan via
+      </div>
+
+      <!-- DANA -->
+      <div class="bank-item">
+        <div class="bank-icon"><i class="fas fa-mobile-alt"></i></div>
+        <div class="bank-detail">
+          <div class="bank-label">
+            DANA <span>dompet digital</span>
+          </div>
+          <div class="bank-number">0815 1318 3499</div>
+          <div class="bank-holder">
+            <i class="fas fa-user-circle"></i> a.n. RUMIN
+          </div>
+        </div>
+        <i class="fas fa-copy" style="color:#789e96; opacity:0.7; cursor:default;"></i>
+      </div>
+
+      <!-- SEABANK -->
+      <div class="bank-item">
+        <div class="bank-icon"><i class="fas fa-university"></i></div>
+        <div class="bank-detail">
+          <div class="bank-label">
+            SEABANK <span>bank digital</span>
+          </div>
+          <div class="bank-number">9014 7949 5789</div>
+          <div class="bank-holder">
+            <i class="fas fa-user-circle"></i> a.n. LILIS
+          </div>
+        </div>
+        <i class="fas fa-copy" style="color:#789e96; opacity:0.7; cursor:default;"></i>
+      </div>
+
+      <!-- informasi tambahan simple -->
+      <div style="font-size:0.8rem; color:#45746b; margin-top: 0.8rem; padding-left: 0.5rem;">
+        <i class="fas fa-clock"></i>  konfirmasi otomatis via mutasi
+      </div>
+    </div>
+
+    <!-- footer cetak & versi (dari file) -->
+    <div class="print-footer">
+      <span><i class="fas fa-print"></i> Dicetak oleh: 93600915</span>
+      <span class="version"><i class="fas fa-code-branch"></i> Versi cetak: 1.0.07.03.26</span>
+    </div>
+
+    <!-- sentuhan copyright kecil (optional) -->
+    <div style="text-align: center; margin-top: 1rem; color: #67948c; font-size: 0.7rem; opacity: 0.7; display: flex; justify-content: center; gap: 1rem;">
+      <span><i class="far fa-credit-card"></i> QRIS Nasional</span>
+      <span>⏤  ✦  ⏤</span>
+      <span><i class="fas fa-shield-alt"></i> standar pembayaran</span>
+    </div>
+  </div>
+</body>
+</html>
